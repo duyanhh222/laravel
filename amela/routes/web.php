@@ -12,11 +12,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/time/{timezone?}', function ($timezone = null) {
+    if(!empty($timezone)){
+        $time = new DateTime(date('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+        $time->setTimezone(new DateTimeZone(str_replace('-', '/', $timezone)));
+        echo 'Múi giờ bạn chọn ' . $timezone . ' hiện tại đang là: ' . $time->format('d-m-Y H:i:s');
+    }
+    return view('view');
 });
-Route::get('login', function(){
-    return view('login');
+Route::get('login1', function(){
+    return view('layout.index');
 });
 Route::post('login', function(Illuminate\Http\Request $request){
     if($request->account == 'admin'  && $request->password == 'admin')
@@ -60,3 +65,20 @@ Route::post('check_dic', function(Illuminate\Http\Request $request){
     }
 });
 
+// Route::group(['prefix' => 'task'], function(){
+//     Route::resource('/','TaskController');
+// });
+
+Route::post('logout','ExController@indexx')->name('logout')->middleware('checkAge');
+Route::get('email', function(){
+    return view('check.email');
+});
+Route::post('check','EmailController@index');
+Route::resource('manager','TaskManagementController');
+Route::resource('customer','CustomerController');
+Route::get('post','PostController@index')->name('post.index');
+Route::get('post/create','PostController@create')->name('post.create');
+Route::post('post','PostController@store')->name('post.store');
+Route::get('post/edit/{post}','PostController@edit')->name('post.edit');
+Route::post('post/update/{post}','PostController@update')->name('post.update');
+Route::get('post/delete/{post}','PostController@delete')->name('post.destroy');

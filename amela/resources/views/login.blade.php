@@ -19,7 +19,7 @@
     </head>
     <body>
         
-        <form action="{{URL::to('login')}}" method="POST" role="form">
+        <form action="{{URL::to('logout')}}" method="POST" role="form">
             <legend>Form title</legend>
             @csrf
             <div class="form-group">
